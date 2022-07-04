@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, watchEffect } from "vue";
 import { v4 as uuidv4 } from "uuid";
 
 export default {

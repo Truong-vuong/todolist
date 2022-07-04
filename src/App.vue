@@ -1,13 +1,16 @@
 <template>
-  <Todos />
+  <div>
+    <Navbar />
+    <router-view />
+  </div>
 </template>
 
 <script>
-import Todos from "./components/Todos.vue";
+import Navbar from "./components/Navbar.vue";
 
 export default {
   components: {
-    Todos,
+    Navbar,
   },
 };
 </script>
