@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper flex justify-center items-center">
     <div class="todos container bg-[#42b983] rounded p-4">
-      <AddTodo :editItem="editItem" />
+      <AddTodo />
       <button @click="onCreate" class="btn bg-orange-500 w-[160px] rounded p-2">
         Create Todo
       </button>
@@ -24,22 +24,15 @@ export default {
   },
   setup() {
     const store = useStore();
-    let todos = [];
-    todos = computed(() => store.state.todos.todos);
 
-    const editItem = reactive({});
-    const handleEdit = (id) => {
-      let item = todos.value.find((item) => item.id == id);
-      Object.assign(editItem, item);
-    };
+    const todos = computed(() => store.state.todos.todos);
     const onCreate = () => {
       editItem.id = null;
     };
 
     return {
-      handleEdit,
-      editItem,
       onCreate,
+      todos,
     };
   },
 };

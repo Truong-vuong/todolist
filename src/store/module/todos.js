@@ -27,7 +27,9 @@ const todosModule = {
             },
         ]
     },
-    getters: {},
+    getters: {
+
+    },
     actions: {
         deleteTodo(context, id) {
             context.commit('DELETE', id)
@@ -47,10 +49,7 @@ const todosModule = {
             if (!newTodo.id) {
                 newTodo.id = uuidv4();
                 state.todos.push(newTodo);
-                state.todo.title = '';
-                state.todo.id = null;
-                state.todo.person = '';
-                state.todo.dateCompleted = '';
+
             } else {
                 var itemEdit = state.todos.find(todo => todo.id === newTodo.id);
                 Object.assign(itemEdit, newTodo);
@@ -59,7 +58,7 @@ const todosModule = {
         },
         EDIT(state, id) {
             let obj = state.todos.find(item => item.id == id);
-            state.todo = obj
+            Object.assign(state.todo, obj)
                 // console.log(state.todo);
                 // state.todo.title = obj.title;
                 // state.todo.id = obj.id;

@@ -12,12 +12,12 @@
     "
   >
     <div class="function m-2 flex gap-1">
-      <input
+      <!-- <input
         type="text"
         v-model="filter"
         placeholder="filter"
         class="outline-none border-none p-1 text-orange-500 w-2/3"
-      />
+      /> -->
       <div class="sort flex gap-2">
         <button @click="sortName" class="btn bg-orange-500 p-2 rounded ml-1">
           Name
@@ -29,7 +29,7 @@
     </div>
     <div
       class="info flex space-between my-4 gap-4"
-      v-for="todo in todosComputed"
+      v-for="todo in todos"
       :key="todo.id"
     >
       <div class="text-xl text-cyan-800 font-semibold">
@@ -65,10 +65,10 @@ export default {
     const store = useStore();
 
     let todos = computed(() => store.state.todos.todos);
-    const filter = "";
-    const todosComputed = computed(() =>
-      todos.value.filter((item) => item.title.includes(filter))
-    );
+    // const filter = "";
+    // const todosComputed = computed(() =>
+    //   todos.value.filter((item) => item.title.includes(filter))
+    // );
 
     const sortName = () => {
       todos.value.sort((a, b) => {
@@ -97,10 +97,11 @@ export default {
     return {
       deleteItem,
       editItem,
-      filter,
+      //filter,
       sortName,
       sortDate,
-      todosComputed,
+      todos,
+      //todosComputed,
     };
   },
 };

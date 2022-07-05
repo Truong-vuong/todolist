@@ -32,7 +32,7 @@
 <script>
 import { reactive, watch, computed } from "vue";
 import { v4 as uuidv4 } from "uuid";
-import { useStore } from "vuex";
+import { useStore, mapState } from "vuex";
 
 export default {
   name: "TodoItem",
@@ -52,28 +52,38 @@ export default {
       person: "",
       dateCompleted: "",
     };
-    const initTodo = computed(() => {
-      return store.state.todos.todo;
-    });
+    const initTodo = computed(() => store.state.todos.todo);
 
-    // watch(initData, (val) => {
-    //   if (val.id) {
-    //     Object.assign(initData, val);
+    console.log(initTodo.value);
+
+    // onUpdated(() => {
+    //   if (initTodo.id) {
+    //     Object.assign(initData, initTodo);
     //   } else {
-    //     initData.id = null;
+    //     initData.id = uuidv4();
     //     initData.title = "";
     //     initData.person = "";
     //     initData.dateCompleted = Date.now;
     //   }
-    // });
-
+    // }),
     const addItem = () => {
-      Object.assign(initData, initTodo);
-      store.dispatch("addTodo", initData);
+      const sendTodo = {};
+      if (!initTodo.value.id) {
+        Object.assign(sendTodo, initData);
+      } else {
+        Object.assign(sendTodo, initTodo.value);
+      }
+
+      store.dispatch("addTodo", sendTodo);
+      // initTodo.id = null;
+      // initTodo.title = "";
+      // initTodo.person = "";
+      // initTodo.dateCompleted = null;
     };
     return {
       initData,
       addItem,
+      initTodo,
     };
   },
 };
