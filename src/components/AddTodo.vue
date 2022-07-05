@@ -30,62 +30,50 @@
 </template>
 
 <script>
-import { reactive, ref, watch, watchEffect } from "vue";
+import { reactive, watch, computed } from "vue";
 import { v4 as uuidv4 } from "uuid";
+import { useStore } from "vuex";
 
 export default {
-  name: "AddTodo",
+  name: "TodoItem",
   props: {
-    todos: {
+    editItem: {
       type: Object,
       default() {
         return {};
       },
     },
-    item: {
-      type: Object,
-      default: () => {},
-    },
   },
-
   setup(props, context) {
-    const initData = reactive({
+    const store = useStore();
+    const initData = {
       id: null,
       title: "",
       person: "",
       dateCompleted: "",
+    };
+    const initTodo = computed(() => {
+      return store.state.todos.todo;
     });
 
-    watch(props.item, (val) => {
-      if (val.id) {
-        Object.assign(initData, val);
-      } else {
-        initData.id = null;
-        initData.title = "";
-        initData.person = "";
-        initData.dateCompleted = Date.now;
-      }
-    });
+    // watch(initData, (val) => {
+    //   if (val.id) {
+    //     Object.assign(initData, val);
+    //   } else {
+    //     initData.id = null;
+    //     initData.title = "";
+    //     initData.person = "";
+    //     initData.dateCompleted = Date.now;
+    //   }
+    // });
 
     const addItem = () => {
-      // let newItem = {
-      //   id: uuidv4(),
-      //   title: title.value,
-      //   person: person.value,
-      //   dateCompleted: dateCompleted.value,
-      // };
-      // context.emit("add-item", newItem);
-      const emitData = Object.assign({}, initData);
-      context.emit("onAdd", emitData);
-      initData.title = "";
-      initData.dateCompleted = null;
-      initData.person = "";
-      initData.id = null;
+      Object.assign(initData, initTodo);
+      store.dispatch("addTodo", initData);
     };
-
     return {
-      addItem,
       initData,
+      addItem,
     };
   },
 };
