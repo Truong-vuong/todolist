@@ -5,14 +5,13 @@
       <button @click="onCreate" class="btn bg-orange-500 w-[160px] rounded p-2">
         Create Todo
       </button>
-
       <TodoItem />
     </div>
   </div>
 </template>
 
 <script>
-import { computed, reactive } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import AddTodo from "./AddTodo.vue";
 import TodoItem from "./TodoItem.vue";
@@ -24,7 +23,6 @@ export default {
   },
   setup() {
     const store = useStore();
-
     const todos = computed(() => store.state.todos.todos);
     const initTodo = computed(() => store.state.todos.todo);
     const onCreate = () => {

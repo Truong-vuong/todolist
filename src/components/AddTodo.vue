@@ -33,49 +33,24 @@
 </template>
 
 <script>
-import { reactive, ref, watch, computed } from "vue";
-import { v4 as uuidv4 } from "uuid";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
   name: "TodoItem",
   setup(props, context) {
     const store = useStore();
-    // const initData = {
-    //   id: null,
-    //   title: "",
-    //   person: "",
-    //   dateCompleted: "",
-    // };
-
     let initTodo = computed(() => store.state.todos.todo);
-    // const initTodo = ref(store.getters);
-
-    // onUpdated(() => {
-    //   if (initTodo.id) {
-    //     Object.assign(initData, initTodo);
-    //   } else {
-    //     initData.id = uuidv4();
-    //     initData.title = "";
-    //     initData.person = "";
-    //     initData.dateCompleted = Date.now;
-    //   }
-    // }),
     const addItem = () => {
       const sendTodo = {};
-
       Object.assign(sendTodo, initTodo.value);
-      // initTodo.value.id = null;
-      // initTodo.value.title = "";
-      // initTodo.value.person = "";
-      // initTodo.value.dateCompleted = null;
-
       store.dispatch("addTodo", sendTodo);
       initTodo.value.id = null;
       initTodo.value.title = "";
       initTodo.value.person = "";
       initTodo.value.dateCompleted = null;
     };
+
     return {
       addItem,
       initTodo,

@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { computed, ref, reactive } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -67,10 +67,6 @@ export default {
   setup(_, context) {
     const store = useStore();
     const todos = computed(() => store.state.todos.todos);
-
-    // console.log(store.getters.available);
-    // const initTodo = ref(store.getters);
-
     const filter = ref("");
     const todosComputed = computed(() =>
       todos.value.filter((item) => item.title.includes(filter.value))
@@ -83,6 +79,7 @@ export default {
         return 0;
       });
     };
+
     const sortDate = () => {
       todos.value.sort((a, b) => {
         if (a.dateCompleted < b.dateCompleted) return -1;
