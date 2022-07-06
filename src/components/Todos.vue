@@ -1,12 +1,12 @@
 <template>
-  <div class="wrapper flex justify-center items-center">
-    <div class="todos container bg-[#42b983] rounded p-4">
+  <div class="wrapper flex justify-center items-center mt-10">
+    <div class="todos container rounded p-4 bg-slate-200 w-[800px]">
       <AddTodo />
       <button @click="onCreate" class="btn bg-orange-500 w-[160px] rounded p-2">
         Create Todo
       </button>
 
-      <TodoItem @edit="handleEdit" />
+      <TodoItem />
     </div>
   </div>
 </template>
@@ -26,13 +26,18 @@ export default {
     const store = useStore();
 
     const todos = computed(() => store.state.todos.todos);
+    const initTodo = computed(() => store.state.todos.todo);
     const onCreate = () => {
-      editItem.id = null;
+      initTodo.value.id = null;
+      initTodo.value.title = "";
+      initTodo.value.person = "";
+      initTodo.value.dateCompleted = "";
     };
 
     return {
       onCreate,
       todos,
+      initTodo,
     };
   },
 };

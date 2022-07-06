@@ -4,20 +4,23 @@
     class="flex items-center justify-between gap-4 mb-4"
   >
     <input
+      required
       type="text"
-      v-model="initData.title"
+      v-model="initTodo.title"
       placeholder="Todo..."
       class="outline-none border-none p-2 text-green-700 font-bold"
     />
     <input
+      required
       type="text"
-      v-model="initData.person"
+      v-model="initTodo.person"
       placeholder="Person..."
       class="outline-none border-none p-2 text-green-700 font-bold"
     />
     <input
+      required
       type="date"
-      v-model="initData.dateCompleted"
+      v-model="initTodo.dateCompleted"
       placeholder="Completed..."
       class="outline-none border-none p-2 text-green-700 font-bold"
     />
@@ -30,31 +33,23 @@
 </template>
 
 <script>
-import { reactive, watch, computed } from "vue";
+import { reactive, ref, watch, computed } from "vue";
 import { v4 as uuidv4 } from "uuid";
-import { useStore, mapState } from "vuex";
+import { useStore } from "vuex";
 
 export default {
   name: "TodoItem",
-  props: {
-    editItem: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-  },
   setup(props, context) {
     const store = useStore();
-    const initData = {
-      id: null,
-      title: "",
-      person: "",
-      dateCompleted: "",
-    };
-    const initTodo = computed(() => store.state.todos.todo);
+    // const initData = {
+    //   id: null,
+    //   title: "",
+    //   person: "",
+    //   dateCompleted: "",
+    // };
 
-    console.log(initTodo.value);
+    let initTodo = computed(() => store.state.todos.todo);
+    // const initTodo = ref(store.getters);
 
     // onUpdated(() => {
     //   if (initTodo.id) {
@@ -68,20 +63,20 @@ export default {
     // }),
     const addItem = () => {
       const sendTodo = {};
-      if (!initTodo.value.id) {
-        Object.assign(sendTodo, initData);
-      } else {
-        Object.assign(sendTodo, initTodo.value);
-      }
+
+      Object.assign(sendTodo, initTodo.value);
+      // initTodo.value.id = null;
+      // initTodo.value.title = "";
+      // initTodo.value.person = "";
+      // initTodo.value.dateCompleted = null;
 
       store.dispatch("addTodo", sendTodo);
-      // initTodo.id = null;
-      // initTodo.title = "";
-      // initTodo.person = "";
-      // initTodo.dateCompleted = null;
+      initTodo.value.id = null;
+      initTodo.value.title = "";
+      initTodo.value.person = "";
+      initTodo.value.dateCompleted = null;
     };
     return {
-      initData,
       addItem,
       initTodo,
     };

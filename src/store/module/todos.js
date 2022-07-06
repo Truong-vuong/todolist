@@ -1,34 +1,40 @@
 import { v4 as uuidv4 } from "uuid";
 const todosModule = {
-    state: {
-        todo: {
-            id: null,
-            title: "",
-            person: "",
-            dateCompleted: "",
-        },
-        todos: [{
-                id: uuidv4(),
-                title: 'Quet nha',
-                person: 'John',
-                dateCompleted: new Date("2019/01/02").toLocaleDateString(),
+
+    state() {
+        return {
+            counter: 0,
+            todo: {
+                id: null,
+                title: "",
+                person: "",
+                dateCompleted: "",
             },
-            {
-                id: uuidv4(),
-                title: 'Rau bat',
-                person: 'Fill',
-                dateCompleted: new Date("2017/05/02").toLocaleDateString(),
-            },
-            {
-                id: uuidv4(),
-                title: 'Nau com',
-                person: 'Nam',
-                dateCompleted: new Date("2022/01/07").toLocaleDateString(),
-            },
-        ]
+            todos: [{
+                    id: uuidv4(),
+                    title: 'Quet nha',
+                    person: 'John',
+                    dateCompleted: new Date("2019/01/02").toLocaleDateString(),
+                },
+                {
+                    id: uuidv4(),
+                    title: 'Rau bat',
+                    person: 'Fill',
+                    dateCompleted: new Date("2017/05/02").toLocaleDateString(),
+                },
+                {
+                    id: uuidv4(),
+                    title: 'Nau com',
+                    person: 'Nam',
+                    dateCompleted: new Date("2022/01/07").toLocaleDateString(),
+                },
+            ],
+        }
     },
     getters: {
-
+        available(state) {
+            return state.todo
+        }
     },
     actions: {
         deleteTodo(context, id) {
@@ -36,6 +42,7 @@ const todosModule = {
         },
         addTodo(context, newTodo) {
             context.commit('ADD', newTodo)
+            console.log(newTodo);
         },
         editTodo(context, id) {
             context.commit('EDIT', id)
