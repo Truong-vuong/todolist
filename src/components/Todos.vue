@@ -5,7 +5,7 @@
       <button @click="onCreate" class="btn bg-orange-500 w-[160px] rounded p-2">
         Create Todo
       </button>
-      <TodoItem />
+      <TodoItem>Total: {{ todos.length }}</TodoItem>
     </div>
   </div>
 </template>

@@ -15,19 +15,19 @@
       type="text"
       v-model="initTodo.person"
       placeholder="Person..."
-      class="outline-none border-none p-2 text-green-700 font-bold"
+      class="btn outline-none border-none p-2 text-green-700 font-bold"
     />
     <input
       required
       type="date"
       v-model="initTodo.dateCompleted"
       placeholder="Completed..."
-      class="outline-none border-none p-2 text-green-700 font-bold"
+      class="btn outline-none border-none p-2 text-green-700 font-bold"
     />
     <input
       type="submit"
       value="Submit"
-      class="btn-add btn bg-green-700 font-bold text-white p-2 rounded"
+      class="btn bg-green-700 font-bold text-white p-2 rounded"
     />
   </form>
 </template>
@@ -38,11 +38,13 @@ import { useStore } from "vuex";
 
 export default {
   name: "TodoItem",
-  setup(props, context) {
+  setup() {
     const store = useStore();
     let initTodo = computed(() => store.state.todos.todo);
     const addItem = () => {
       const sendTodo = {};
+      initTodo.value.title = initTodo.value.title.trim();
+      initTodo.value.person = initTodo.value.person.trim();
       Object.assign(sendTodo, initTodo.value);
       store.dispatch("addTodo", sendTodo);
       initTodo.value.id = null;

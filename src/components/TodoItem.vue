@@ -1,57 +1,68 @@
 <template>
-  <div class="box">
-    <div
-      class="
-        list
-        flex flex-col
-        items-center
-        space-start
-        bg-white
-        rounded
-        m-4
-        w-[500px]
-        p-4
-      "
-    >
-      <div class="function m-2 flex gap-1 w-full">
-        <input
-          type="text"
-          v-model="filter"
-          placeholder="filter"
-          class="p-1 text-orange-500 w-2/3"
-        />
-        <div class="sort flex gap-2">
-          <button @click="sortName" class="btn bg-orange-500 p-2 rounded ml-1">
-            Name
-          </button>
-          <button @click="sortDate" class="btn bg-orange-500 p-2 rounded ml-1">
-            Date
-          </button>
-        </div>
-      </div>
+  <div>
+    <div class="box">
       <div
-        class="info mt-4 w-full"
-        v-for="todo in todosComputed"
-        :key="todo.id"
+        class="
+          list
+          flex flex-col
+          items-center
+          space-start
+          bg-white
+          rounded
+          m-4
+          w-[500px]
+          p-4
+        "
       >
-        <div class="text-xl text-cyan-800 font-semibold">
-          {{ todo.title }}
+        <div class="function m-2 flex gap-1 w-full">
+          <input
+            type="text"
+            v-model="filter"
+            placeholder="filter"
+            class="p-1 text-orange-500 w-2/3 outline-none"
+          />
+          <div class="sort flex gap-2">
+            <button
+              @click="sortName"
+              class="btn bg-orange-500 p-2 rounded ml-1"
+            >
+              Name
+            </button>
+            <button
+              @click="sortDate"
+              class="btn bg-orange-500 p-2 rounded ml-1"
+            >
+              Date
+            </button>
+          </div>
         </div>
-        <div class="text-xl text-cyan-800">{{ todo.person }}</div>
-        <div class="text-xl text-cyan-800">{{ todo.dateCompleted }}</div>
-        <div class="button flex gap-2">
-          <button
-            class="bg-orange-500 text-white py-1 px-2 rounded"
-            @click="editItem(todo.id)"
-          >
-            E
-          </button>
-          <button
-            class="bg-red-500 text-white py-1 px-2 rounded"
-            @click="deleteItem(todo.id)"
-          >
-            X
-          </button>
+        <slot></slot>
+        <div
+          class="info mt-4 w-full"
+          v-for="todo in todosComputed"
+          :key="todo.id"
+        >
+          <div class="text-xl text-cyan-800 font-semibold">
+            {{ todo.title }}
+          </div>
+          <div class="text-xl text-cyan-800">{{ todo.person }}</div>
+          <div class="text-xl text-cyan-800">
+            {{ new Date(todo.dateCompleted).toLocaleDateString() }}
+          </div>
+          <div class="button flex gap-2">
+            <button
+              class="bg-orange-500 text-white py-1 px-2 rounded"
+              @click="editItem(todo.id)"
+            >
+              E
+            </button>
+            <button
+              class="bg-red-500 text-white py-1 px-2 rounded"
+              @click="deleteItem(todo.id)"
+            >
+              X
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -64,12 +75,14 @@ import { useStore } from "vuex";
 
 export default {
   name: "TodoItem",
-  setup(_, context) {
+  setup() {
     const store = useStore();
     const todos = computed(() => store.state.todos.todos);
     const filter = ref("");
     const todosComputed = computed(() =>
-      todos.value.filter((item) => item.title.includes(filter.value))
+      todos.value.filter((item) =>
+        item.title.toLowerCase().includes(filter.value)
+      )
     );
 
     const sortName = () => {
@@ -111,7 +124,7 @@ export default {
 
 <style>
 .function {
-  border: 1px solid green;
+  border: 2px solid green;
   border-radius: 3px;
   width: 100%;
   display: flex;
