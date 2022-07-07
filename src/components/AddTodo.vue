@@ -6,14 +6,14 @@
     <input
       required
       type="text"
-      v-model="initTodo.title"
+      v-model.trim="initTodo.title"
       placeholder="Todo..."
       class="outline-none border-none p-2 text-green-700 font-bold"
     />
     <input
       required
       type="text"
-      v-model="initTodo.person"
+      v-model.trim="initTodo.person"
       placeholder="Person..."
       class="btn outline-none border-none p-2 text-green-700 font-bold"
     />
@@ -43,8 +43,6 @@ export default {
     let initTodo = computed(() => store.state.todos.todo);
     const addItem = () => {
       const sendTodo = {};
-      initTodo.value.title = initTodo.value.title.trim();
-      initTodo.value.person = initTodo.value.person.trim();
       Object.assign(sendTodo, initTodo.value);
       store.dispatch("addTodo", sendTodo);
       initTodo.value.id = null;

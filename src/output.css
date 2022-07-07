@@ -622,6 +622,10 @@ video {
   display: flex;
 }
 
+.table {
+  display: table;
+}
+
 .w-\[600px\] {
   width: 600px;
 }
@@ -742,9 +746,23 @@ video {
   padding-right: 0.5rem;
 }
 
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.text-right {
+  text-align: right;
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 .font-bold {
@@ -753,6 +771,10 @@ video {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 .text-green-700 {

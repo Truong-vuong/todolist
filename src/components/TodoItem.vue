@@ -14,6 +14,7 @@
           p-4
         "
       >
+        <slot></slot>
         <div class="function m-2 flex gap-1 w-full">
           <input
             type="text"
@@ -24,22 +25,56 @@
           <div class="sort flex gap-2">
             <button
               @click="sortName"
-              class="btn bg-orange-500 p-2 rounded ml-1"
+              class="
+                btn
+                bg-orange-500
+                px-1
+                rounded
+                ml-1
+                text-xs
+                flex
+                items-center
+              "
             >
-              Name
+              Name <i class="bx bxs-chevron-up" v-if="orderDirect"></i>
+              <i v-else class="bx bxs-chevron-down"></i>
             </button>
             <button
               @click="sortDate"
-              class="btn bg-orange-500 p-2 rounded ml-1"
+              class="
+                btn
+                bg-orange-500
+                px-1
+                rounded
+                ml-1
+                text-xs
+                flex
+                items-center
+              "
             >
-              Date
+              Date <i class="bx bxs-chevron-up" v-if="orderDate"></i>
+              <i v-else class="bx bxs-chevron-down"></i>
+            </button>
+            <button
+              @click="sortDefault"
+              class="
+                btn
+                bg-orange-500
+                px-1
+                rounded
+                ml-1
+                text-xs
+                flex
+                items-center
+              "
+            >
+              default <i class="bx bxs-chevron-down"></i>
             </button>
           </div>
         </div>
-        <slot></slot>
         <div
           class="info mt-4 w-full"
-          v-for="todo in todosComputed"
+          v-for="todo in filterComputed"
           :key="todo.id"
         >
           <div class="text-xl text-cyan-800 font-semibold">
@@ -77,28 +112,24 @@ export default {
   name: "TodoItem",
   setup() {
     const store = useStore();
-    const todos = computed(() => store.state.todos.todos);
-    const filter = ref("");
-    const todosComputed = computed(() =>
-      todos.value.filter((item) =>
-        item.title.toLowerCase().includes(filter.value)
-      )
-    );
-
+    const filterComputed = computed(() => store.getters.filterComputed);
+    console.log(store.getters);
+    let filter = computed(() => store.state.todos.filter);
+    console.log(filter.value);
+    //   todos.value.filter(
+    //     (item) =>
+    //       item.title.toLowerCase().includes(filter.value.toLowerCase()) ||
+    //       item.person.toLowerCase().includes(filter.value.toLowerCase())
+    //   )
+    // );
+    const orderDirect = computed(() => store.state.todos.orderDirect);
+    const orderDate = computed(() => store.state.todos.orderDate);
     const sortName = () => {
-      todos.value.sort((a, b) => {
-        if (a.title < b.title) return -1;
-        if (a.title > b.title) return 1;
-        return 0;
-      });
+      store.dispatch("sortName", orderDirect.value);
     };
 
     const sortDate = () => {
-      todos.value.sort((a, b) => {
-        if (a.dateCompleted < b.dateCompleted) return -1;
-        if (a.dateCompleted > b.dateCompleted) return 1;
-        return 0;
-      });
+      store.dispatch("sortDate", orderDate.value);
     };
 
     const deleteItem = (id) => {
@@ -112,11 +143,13 @@ export default {
     return {
       deleteItem,
       editItem,
-      filter,
+
       sortName,
       sortDate,
-      todosComputed,
-      todos,
+      filterComputed,
+      filter,
+      orderDirect,
+      orderDate,
     };
   },
 };
