@@ -12,33 +12,50 @@ const todosModule = {
             todos: [],
             isSortByName: false,
             isSortByDate: false,
-            orderByName: false,
-            orderByDate: false,
+            orderByName: true,
+            orderByDate: true,
             filter: ""
         }
     },
     getters: {
-        filterComputed(state) {
-            state.todos.filter(item => item.title.toLowerCase().includes(state.filter.toLowerCase()) ||
+        getTodos(state) {
+            return state.todos
+        },
+        filterComputed(state, getters) {
+            return getters.getTodos.filter(item => item.title.toLowerCase().includes(state.filter.toLowerCase()) ||
                 item.person.toLowerCase().includes(state.filter.toLowerCase())
             )
+        },
+        dataAffterSort(state, getters) {
+            if (!state.isSortByName && !state.isSortByDate) {
+                return getters.filterComputed
+            }
+            if (state.isSortByName) {
+                return getters.filterComputed.sort((a, b) => {
+                    if (!state.orderByName) {
+                        if (a.title < b.title) return -1;
+                        if (a.title > b.title) return 1;
+                        return 0;
+                    } else {
+                        if (a.title < b.title) return 1;
+                        if (a.title > b.title) return -1;
+                        return 0;
+                    };
+                });
+            } else if (state.isSortByDate) {
+                return getters.filterComputed.sort((a, b) => {
+                    if (!state.orderByDate) {
+                        if (a.dateCompleted < b.dateCompleted) return -1;
+                        if (a.dateCompleted > b.dateCompleted) return 1;
+                        return 0;
+                    } else {
+                        if (a.dateCompleted < b.dateCompleted) return 1;
+                        if (a.dateCompleted > b.dateCompleted) return -1;
+                        return 0;
+                    };
+                });
+            }
         }
-
-        // dataAffterSort: {
-        //     if(state.isSortByName) {
-        //         state.todos.sort((a, b) => {
-        //             if (!pay) {
-        //                 if (a.title < b.title) return -1;
-        //                 if (a.title > b.title) return 1;
-        //                 return 0;
-        //             } else {
-        //                 if (a.title < b.title) return 1;
-        //                 if (a.title > b.title) return -1;
-        //                 return 0;
-        //             };
-        //         });
-        //     }
-        // }
     },
     actions: {
         deleteTodo(context, id) {
@@ -50,13 +67,14 @@ const todosModule = {
         editTodo(context, id) {
             context.commit('EDIT', id)
         },
+        filter(context, pay) {
+            context.state.filter = pay;
+        },
         sortName(context, pay) {
-            context.commit('SORTNAME', pay)
-            context.state.orderDirect = !context.state.orderDirect
+            context.commit("SORTNAME", pay)
         },
         sortDate(context, pay) {
-            context.commit('SORTDATE', pay)
-            context.state.orderDate = !context.state.orderDate
+            context.commit("SORTDATE", pay)
         }
     },
     mutations: {
@@ -77,30 +95,15 @@ const todosModule = {
             Object.assign(state.todo, obj)
         },
         SORTNAME(state, pay) {
-            state.todos.sort((a, b) => {
-                if (!pay) {
-                    if (a.title < b.title) return -1;
-                    if (a.title > b.title) return 1;
-                    return 0;
-                } else {
-                    if (a.title < b.title) return 1;
-                    if (a.title > b.title) return -1;
-                    return 0;
-                };
-            });
+            state.isSortByName = true;
+            state.isSortByDate = false;
+            state.orderByName = !state.orderByName
         },
+
         SORTDATE(state, pay) {
-            state.todos.sort((a, b) => {
-                if (!pay) {
-                    if (a.dateCompleted < b.dateCompleted) return -1;
-                    if (a.dateCompleted > b.dateCompleted) return 1;
-                    return 0;
-                } else {
-                    if (a.dateCompleted < b.dateCompleted) return 1;
-                    if (a.dateCompleted > b.dateCompleted) return -1;
-                    return 0;
-                };
-            });
+            state.isSortByDate = true;
+            state.isSortByName = false;
+            state.orderByDate = !state.orderByDate
         }
     }
 }

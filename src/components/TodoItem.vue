@@ -36,7 +36,7 @@
                 items-center
               "
             >
-              Name <i class="bx bxs-chevron-up" v-if="orderDirect"></i>
+              Name <i class="bx bxs-chevron-up" v-if="orderByName"></i>
               <i v-else class="bx bxs-chevron-down"></i>
             </button>
             <button
@@ -52,10 +52,10 @@
                 items-center
               "
             >
-              Date <i class="bx bxs-chevron-up" v-if="orderDate"></i>
+              Date <i class="bx bxs-chevron-up" v-if="orderByDate"></i>
               <i v-else class="bx bxs-chevron-down"></i>
             </button>
-            <button
+            <!-- <button
               @click="sortDefault"
               class="
                 btn
@@ -69,12 +69,12 @@
               "
             >
               default <i class="bx bxs-chevron-down"></i>
-            </button>
+            </button> -->
           </div>
         </div>
         <div
           class="info mt-4 w-full"
-          v-for="todo in filterComputed"
+          v-for="todo in dataAffterSort"
           :key="todo.id"
         >
           <div class="text-xl text-cyan-800 font-semibold">
@@ -105,31 +105,29 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {
   name: "TodoItem",
   setup() {
     const store = useStore();
-    const filterComputed = computed(() => store.getters.filterComputed);
-    console.log(store.getters);
-    let filter = computed(() => store.state.todos.filter);
-    console.log(filter.value);
-    //   todos.value.filter(
-    //     (item) =>
-    //       item.title.toLowerCase().includes(filter.value.toLowerCase()) ||
-    //       item.person.toLowerCase().includes(filter.value.toLowerCase())
-    //   )
-    // );
-    const orderDirect = computed(() => store.state.todos.orderDirect);
-    const orderDate = computed(() => store.state.todos.orderDate);
+    const dataAffterSort = computed(() => store.getters.dataAffterSort);
+    const filter = ref("");
+    let filterState = computed(() => store.state.todos.filter);
+    const orderByName = computed(() => store.state.todos.orderByName);
+    const orderByDate = computed(() => store.state.todos.orderByDate);
+
+    watch(filter, (val) => {
+      store.dispatch("filter", val);
+    });
+
     const sortName = () => {
-      store.dispatch("sortName", orderDirect.value);
+      store.dispatch("sortName", orderByName.value);
     };
 
     const sortDate = () => {
-      store.dispatch("sortDate", orderDate.value);
+      store.dispatch("sortDate", orderByDate.value);
     };
 
     const deleteItem = (id) => {
@@ -146,10 +144,11 @@ export default {
 
       sortName,
       sortDate,
-      filterComputed,
+      dataAffterSort,
       filter,
-      orderDirect,
-      orderDate,
+      orderByName,
+      orderByDate,
+      filterState,
     };
   },
 };
